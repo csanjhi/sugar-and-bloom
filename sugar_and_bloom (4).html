@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sugar & Bloom — Handcrafted Cakes</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rose: #e8637a;
+    --rose-light: #fdf0f2;
+    --rose-dark: #c04a60;
+    --cream: #fdf8f3;
+    --gold: #c8933a;
+    --gold-light: #fdf3e3;
+    --text: #2c1e1e;
+    --text-muted: #7a5c5c;
+    --border: #ead4d4;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(200,100,120,0.10);
+    --radius: 16px;
+    --radius-sm: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,248,243,0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { font-size: 1.25rem; font-weight: bold; color: var(--rose); letter-spacing: 0.02em; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-family: sans-serif; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--rose); }
+
+  /* HERO */
+  .hero {
+    min-height: 92vh;
+    background: linear-gradient(135deg, #fdf0f2 0%, #fdf8f3 50%, #fdf3e3 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 20% 30%, rgba(232,99,122,0.08) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 70%, rgba(200,147,58,0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; max-width: 700px; }
+  .hero-badge {
+    display: inline-block;
+    background: var(--rose-light); color: var(--rose-dark);
+    font-family: sans-serif; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 6px 18px; border-radius: 999px; border: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .hero h1 span { color: var(--rose); }
+  .hero-tagline {
+    font-size: 1.2rem; color: var(--text-muted);
+    margin-bottom: 2.5rem; font-style: italic;
+  }
+  .hero-cta {
+    display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  }
+  .btn {
+    display: inline-block; padding: 14px 32px;
+    border-radius: 999px; font-family: sans-serif; font-size: 0.95rem;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: var(--rose); color: #fff;
+    box-shadow: 0 4px 16px rgba(232,99,122,0.35);
+  }
+  .btn-primary:hover { background: var(--rose-dark); box-shadow: 0 6px 20px rgba(232,99,122,0.45); }
+  .btn-secondary {
+    background: var(--white); color: var(--rose);
+    border: 1.5px solid var(--rose);
+  }
+  .btn-secondary:hover { background: var(--rose-light); }
+
+  .hero-scroll {
+    margin-top: 3rem;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--text-muted); font-family: sans-serif; font-size: 0.8rem;
+  }
+  .scroll-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--rose);
+    animation: bob 1.5s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-header h2 { font-size: 2rem; color: var(--text); margin-bottom: 0.5rem; }
+  .section-header p { color: var(--text-muted); font-style: italic; }
+  .divider {
+    width: 48px; height: 3px;
+    background: linear-gradient(to right, var(--rose), var(--gold));
+    border-radius: 2px; margin: 1rem auto;
+  }
+
+  /* QUIZ */
+  #quiz { background: var(--white); }
+  .quiz-wrap {
+    max-width: 640px; margin: 0 auto;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+  }
+  .quiz-progress {
+    display: flex; gap: 8px; margin-bottom: 2rem;
+  }
+  .quiz-pip {
+    flex: 1; height: 4px; border-radius: 2px;
+    background: var(--border); transition: background 0.4s;
+  }
+  .quiz-pip.done { background: var(--rose); }
+
+  .quiz-step { display: none; animation: fadeUp 0.35s ease; }
+  .quiz-step.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .quiz-q { font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text); }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    padding: 13px 20px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    cursor: pointer;
+    font-family: sans-serif; font-size: 0.95rem; color: var(--text);
+    text-align: left;
+    transition: border-color 0.2s, background 0.2s, transform 0.1s;
+  }
+  .quiz-opt:hover { border-color: var(--rose); background: var(--rose-light); transform: translateX(4px); }
+  .quiz-opt.selected { border-color: var(--rose); background: var(--rose-light); color: var(--rose-dark); }
+
+  .quiz-result {
+    text-align: center; padding: 1rem 0;
+  }
+  .quiz-result-cake {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem; margin: 1.5rem 0;
+  }
+  .quiz-result-cake h3 { font-size: 1.4rem; color: var(--rose); margin-bottom: 0.5rem; }
+  .quiz-result-cake p { color: var(--text-muted); margin-bottom: 1rem; font-style: italic; }
+  .quiz-result-cake .price-tag {
+    display: inline-block;
+    background: var(--gold-light); color: var(--gold);
+    padding: 4px 14px; border-radius: 999px;
+    font-family: sans-serif; font-size: 0.9rem; font-weight: bold;
+  }
+  .quiz-restart {
+    background: none; border: 1.5px solid var(--border);
+    border-radius: 999px; padding: 10px 24px;
+    color: var(--text-muted); font-family: sans-serif; font-size: 0.9rem;
+    cursor: pointer; margin-top: 1rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .quiz-restart:hover { border-color: var(--rose); color: var(--rose); }
+
+  /* MENU */
+  #menu { background: var(--cream); }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .cake-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .cake-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(200,100,120,0.15); }
+  .cake-photo {
+    width: 100%; height: 200px;
+    object-fit: cover; display: block;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--rose-light);
+  }
+  .cake-body { padding: 1.5rem; }
+  .cake-card h3 { font-size: 1.15rem; color: var(--text); margin-bottom: 0.4rem; }
+  .cake-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+  .cake-card .price {
+    font-family: sans-serif; font-size: 1rem; font-weight: bold;
+    color: var(--gold);
+  }
+  .cake-tag {
+    display: inline-block;
+    background: var(--rose-light); color: var(--rose-dark);
+    font-family: sans-serif; font-size: 0.72rem; letter-spacing: 0.07em;
+    padding: 3px 10px; border-radius: 999px;
+    margin-bottom: 0.75rem; text-transform: uppercase;
+  }
+
+  /* REVIEWS */
+  #reviews { background: var(--white); }
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .review-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    position: relative;
+  }
+  .review-card::before {
+    content: '\201C';
+    position: absolute; top: 1rem; right: 1.5rem;
+    font-size: 4rem; color: var(--border);
+    font-family: Georgia, serif; line-height: 1;
+  }
+  .review-text { font-style: italic; color: var(--text); margin-bottom: 1rem; line-height: 1.6; }
+  .review-author { font-family: sans-serif; font-size: 0.85rem; color: var(--rose); font-weight: bold; }
+  .stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 0.75rem; letter-spacing: 2px; }
+
+  /* CONTACT */
+  #contact { background: linear-gradient(135deg, #fdf0f2, #fdf8f3); }
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+    max-width: 900px; margin: 0 auto;
+    align-items: start;
+  }
+  @media(max-width: 660px) {
+    .contact-wrap { grid-template-columns: 1fr; }
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 1rem; }
+    section { padding: 3rem 1rem; }
+    .quiz-wrap { padding: 1.5rem; }
+  }
+  .contact-info h3 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--text); }
+  .contact-info p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.6rem; }
+  .contact-detail {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 0.75rem; font-family: sans-serif; font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .contact-detail span:first-child { color: var(--rose); font-size: 1rem; }
+
+  .order-form {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+  .order-form h3 { font-size: 1.15rem; margin-bottom: 1.25rem; color: var(--text); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label {
+    display: block; font-family: sans-serif; font-size: 0.82rem;
+    color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: Georgia, serif; font-size: 0.95rem; color: var(--text);
+    background: var(--cream);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--rose);
+    box-shadow: 0 0 0 3px rgba(232,99,122,0.12);
+  }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--rose); color: #fff;
+    border: none; border-radius: 999px;
+    font-family: sans-serif; font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 0.5rem;
+  }
+  .form-submit:hover { background: var(--rose-dark); }
+  .form-submit:active { transform: scale(0.98); }
+  .form-success {
+    display: none; text-align: center; padding: 2rem;
+    color: var(--text);
+  }
+  .form-success .check { font-size: 2.5rem; color: #4caf7d; margin-bottom: 1rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--text);
+    color: #c9a8a8;
+    text-align: center;
+    padding: 2rem;
+    font-family: sans-serif; font-size: 0.85rem;
+  }
+  footer span { color: var(--rose); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Sugar &amp; Bloom</div>
+  <ul class="nav-links">
+    <li><a href="#quiz">Find My Cake</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Order</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-badge">&#10022; Boutique Bakery &#10022;</div>
+    <h1><span>Sugar</span> &amp; Bloom</h1>
+    <p class="hero-tagline">Handcrafted cakes for life's sweetest moments</p>
+    <div class="hero-cta">
+      <a href="#quiz" class="btn btn-primary">Find Your Perfect Cake</a>
+      <a href="#menu" class="btn btn-secondary">Browse Our Menu</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-dot"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2>Find Your Perfect Cake</h2>
+      <div class="divider"></div>
+      <p>Answer three quick questions and we'll match you with your dream cake.</p>
+    </div>
+
+    <div class="quiz-wrap">
+      <div class="quiz-progress">
+        <div class="quiz-pip" id="pip1"></div>
+        <div class="quiz-pip" id="pip2"></div>
+        <div class="quiz-pip" id="pip3"></div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="quiz-step active" id="step1">
+        <p class="quiz-q">&#127874; What's the occasion?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="pick(1,'Birthday')">&#127880; Birthday</button>
+          <button class="quiz-opt" onclick="pick(1,'Wedding')">&#128141; Wedding / Shaadi</button>
+          <button class="quiz-opt" onclick="pick(1,'Anniversary')">&#128149; Anniversary</button>
+          <button class="quiz-opt" onclick="pick(1,'Puja & Festival')">&#127774; Puja &amp; Festival</button>
+          <button class="quiz-opt" onclick="pick(1,'Just Because')">&#127801; Just Because</button>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="quiz-step" id="step2">
+        <p class="quiz-q">&#127856; What flavor calls to you?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="pick(2,'Chocolate')">&#127848; Chocolate</button>
+          <button class="quiz-opt" onclick="pick(2,'Vanilla')">&#10024; Vanilla</button>
+          <button class="quiz-opt" onclick="pick(2,'Red Velvet')">&#129482; Red Velvet</button>
+          <button class="quiz-opt" onclick="pick(2,'Lemon')">&#127819; Lemon</button>
+          <button class="quiz-opt" onclick="pick(2,'Surprise Me')">&#127381; Surprise Me!</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="quiz-step" id="step3">
+        <p class="quiz-q">&#128176; What's your budget?</p>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="pick(3,'Under ₹1,500')">Under ₹1,500</button>
+          <button class="quiz-opt" onclick="pick(3,'₹1,500–₹3,500')">₹1,500 – ₹3,500</button>
+          <button class="quiz-opt" onclick="pick(3,'₹3,500–₹8,000')">₹3,500 – ₹8,000</button>
+          <button class="quiz-opt" onclick="pick(3,'₹8,000+')">₹8,000+</button>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="quiz-step" id="step-result">
+        <div class="quiz-result" id="quiz-result-content"></div>
+        <button class="quiz-restart" onclick="restartQuiz()">&#8635; Start Over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2>Our Cake Menu</h2>
+      <div class="divider"></div>
+      <p>Every cake is baked to order with seasonal, quality ingredients.</p>
+    </div>
+    <div class="menu-grid">
+
+      <div class="cake-card">
+        <img class="cake-photo" src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80" alt="Midnight Velvet Chocolate Cake">
+        <div class="cake-body">
+          <span class="cake-tag">Bestseller</span>
+          <h3>Midnight Velvet Chocolate</h3>
+          <p>Triple-layered dark chocolate cake with silky ganache frosting and Belgian chocolate shavings. Intensely rich and deeply satisfying.</p>
+          <div class="price">From ₹1,799</div>
+        </div>
+      </div>
+
+      <div class="cake-card">
+        <img class="cake-photo" src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600&q=80" alt="Vanilla Dream Cloud Cake">
+        <div class="cake-body">
+          <span class="cake-tag">Classic</span>
+          <h3>Vanilla Dream Cloud</h3>
+          <p>Light vanilla sponge layered with Madagascar vanilla buttercream and a dusting of edible pearl shimmer. Timeless elegance in every bite.</p>
+          <div class="price">From ₹1,499</div>
+        </div>
+      </div>
+
+      <div class="cake-card">
+        <img class="cake-photo" src="https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=600&q=80" alt="Crimson Red Velvet Cake">
+        <div class="cake-body">
+          <span class="cake-tag">Signature</span>
+          <h3>Crimson Red Velvet</h3>
+          <p>Our signature red velvet with house cream cheese frosting, toasted pecans, and a classic crimson crumb. Perfect for any celebration.</p>
+          <div class="price">From ₹1,999</div>
+        </div>
+      </div>
+
+      <div class="cake-card">
+        <img class="cake-photo" src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=600&q=80" alt="Sunshine Lemon Drizzle Cake">
+        <div class="cake-body">
+          <span class="cake-tag">Seasonal</span>
+          <h3>Sunshine Lemon Drizzle</h3>
+          <p>Bright lemon sponge soaked in citrus syrup, layered with lemon curd and whipped mascarpone. Zesty, fresh, and utterly irresistible.</p>
+          <div class="price">From ₹1,699</div>
+        </div>
+      </div>
+
+      <div class="cake-card">
+        <img class="cake-photo" src="https://images.unsplash.com/photo-1519869325930-281384150729?w=600&q=80" alt="Rose and Almond Celebration Cake">
+        <div class="cake-body">
+          <span class="cake-tag">Wedding Favourite</span>
+          <h3>Rose &amp; Almond Celebration</h3>
+          <p>Almond sponge infused with rosewater, filled with raspberry jam and rose petal cream, finished with pressed edible florals.</p>
+          <div class="price">From ₹5,999</div>
+        </div>
+      </div>
+
+      <div class="cake-card">
+        <img class="cake-photo" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Bespoke Bloom Custom Cake">
+        <div class="cake-body">
+          <span class="cake-tag">Build Your Own</span>
+          <h3>Bespoke Bloom Cake</h3>
+          <p>Choose your sponge, filling, frosting, and decoration. Fully custom-designed to match your vision — from intimate gatherings to grand events.</p>
+          <div class="price">From ₹2,999</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2>What Our Customers Say</h2>
+      <div class="divider"></div>
+      <p>Every slice tells a story.</p>
+    </div>
+    <div class="reviews-grid">
+
+      <div class="review-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">The Crimson Red Velvet was the star of our wedding! Every single guest asked where the cake came from. It tasted as beautiful as it looked — we couldn't have asked for more.</p>
+        <div class="review-author">— Priya &amp; Rahul S., Wedding Clients, Delhi</div>
+      </div>
+
+      <div class="review-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">Ordered the Midnight Velvet for my daughter's birthday and she was absolutely speechless. The cake was moist, rich, and arrived beautifully packed. Sugar &amp; Bloom is the only bakery I'll ever use.</p>
+        <div class="review-author">— Anita Khanna, Birthday Order, Meerut</div>
+      </div>
+
+      <div class="review-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">I wanted something custom for my parents' anniversary and they nailed it — the Bespoke Bloom Cake matched my vision exactly and tasted even better than I imagined. Bilkul perfect!</p>
+        <div class="review-author">— Suresh T., Custom Order, Ghaziabad</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2>Place an Order</h2>
+      <div class="divider"></div>
+      <p>We'd love to bake something special for you.</p>
+    </div>
+    <div class="contact-wrap">
+      <div class="contact-info">
+        <h3>Get in Touch</h3>
+        <p>We take custom orders with at least 5 days' notice. Weekend slots fill quickly — reach out early!</p>
+        <br>
+        <div class="contact-detail">
+          <span>&#128205;</span>
+          <span>12 Rose Garden Lane, Civil Lines, Meerut, UP</span>
+        </div>
+        <div class="contact-detail">
+          <span>&#128222;</span>
+          <span>+91 98765 43210</span>
+        </div>
+        <div class="contact-detail">
+          <span>&#9993;</span>
+          <span>hello@sugarandbloom.com</span>
+        </div>
+        <div class="contact-detail">
+          <span>&#128336;</span>
+          <span>Tue–Sat: 9am – 6pm<br>Sun: 10am – 3pm</span>
+        </div>
+        <br>
+        <p style="font-size:0.85rem; color: var(--text-muted); font-style: italic;">All orders confirmed within 24 hours. 30% advance via UPI/bank transfer to secure your date. We also accept cash on delivery for local orders.</p>
+      </div>
+
+      <div class="order-form">
+        <h3>Order Request Form</h3>
+        <div id="form-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" placeholder="Priya Sharma" id="f-name">
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" placeholder="jane@email.com" id="f-email">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" placeholder="+91 98765 43210" id="f-phone">
+            </div>
+            <div class="form-group">
+              <label>Date Needed</label>
+              <input type="date" id="f-date">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Cake of Interest</label>
+            <select id="f-cake">
+              <option value="">— Choose a cake —</option>
+              <option>Midnight Velvet Chocolate</option>
+              <option>Vanilla Dream Cloud</option>
+              <option>Crimson Red Velvet</option>
+              <option>Sunshine Lemon Drizzle</option>
+              <option>Rose &amp; Almond Celebration</option>
+              <option>Bespoke Bloom Cake</option>
+              <option>Not sure yet — help me choose</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tell Us More</label>
+            <textarea placeholder="Occasion, number of guests, eggless preference, any special requests, dietary needs (jain, vegan, etc.)..." id="f-message"></textarea>
+          </div>
+          <button class="form-submit" onclick="submitForm()">Send My Order Request &#10132;</button>
+        </div>
+        <div class="form-success" id="form-success">
+          <div class="check">&#10004;</div>
+          <h3 style="margin-bottom:0.5rem;">We've received your request!</h3>
+          <p style="color:var(--text-muted); font-family:sans-serif; font-size:0.9rem;">We'll be in touch within 24 hours to confirm your order. Thank you for choosing Sugar &amp; Bloom!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Made with <span>&#10084;</span> by Sugar &amp; Bloom &nbsp;&bull;&nbsp; Handcrafted cakes for life's sweetest moments &nbsp;&bull;&nbsp; &copy; 2026</p>
+</footer>
+
+<script>
+  const answers = {};
+  let currentStep = 1;
+
+  const cakeRecs = {
+    recommend(occasion, flavor, budget) {
+      if (budget === 'Under ₹1,500') return {
+        name: 'Vanilla Dream Cloud (Mini)',
+        desc: 'A gorgeous petite vanilla cake — perfect for an intimate celebration without breaking the budget.',
+        price: 'From ₹1,299', emoji: '✨'
+      };
+      if (flavor === 'Chocolate') return {
+        name: 'Midnight Velvet Chocolate',
+        desc: 'Our most-loved chocolate cake — intensely rich, beautifully finished, and perfect for any moment worth celebrating.',
+        price: 'From ₹1,799', emoji: '🍫'
+      };
+      if (flavor === 'Red Velvet') return {
+        name: 'Crimson Red Velvet',
+        desc: 'Our signature showstopper with house cream cheese frosting. Stunning for birthdays, weddings, and everything in between.',
+        price: 'From ₹1,999', emoji: '🩷'
+      };
+      if (flavor === 'Lemon') return {
+        name: 'Sunshine Lemon Drizzle',
+        desc: 'Bright, zesty, and utterly fresh — a crowd-pleaser that brings sunshine to any table.',
+        price: 'From ₹1,699', emoji: '🍋'
+      };
+      if (occasion === 'Wedding' || budget === '₹8,000+') return {
+        name: 'Rose & Almond Celebration',
+        desc: 'Our most elegant creation — almond sponge, rosewater, and pressed edible florals. Designed for life\'s grandest moments.',
+        price: 'From ₹5,999', emoji: '💍'
+      };
+      if (occasion === 'Birthday') return {
+        name: 'Bespoke Bloom Cake',
+        desc: 'A fully custom cake designed just for your celebration. We\'ll work with you to make their birthday completely unforgettable.',
+        price: 'From ₹2,999', emoji: '🎂'
+      };
+      return {
+        name: 'Bespoke Bloom Cake',
+        desc: 'Tell us your vision and we\'ll create something truly one-of-a-kind, just for you.',
+        price: 'From ₹2,999', emoji: '🌸'
+      };
+    }
+  };
+
+  function pick(step, value) {
+    answers[step] = value;
+    document.getElementById('pip' + step).classList.add('done');
+
+    document.getElementById('step' + step).classList.remove('active');
+
+    if (step < 3) {
+      const next = document.getElementById('step' + (step + 1));
+      next.classList.add('active');
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    const rec = cakeRecs.recommend(answers[1], answers[2], answers[3]);
+    const el = document.getElementById('quiz-result-content');
+    el.innerHTML = `
+      <p style="font-family:sans-serif; font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Based on your answers, we recommend:</p>
+      <div class="quiz-result-cake">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">${rec.emoji}</div>
+        <h3>${rec.name}</h3>
+        <p>${rec.desc}</p>
+        <span class="price-tag">${rec.price}</span>
+      </div>
+      <a href="#contact" class="btn btn-primary" style="margin-top:0.5rem; font-size:0.9rem;">Order This Cake</a>
+    `;
+    document.getElementById('step-result').classList.add('active');
+  }
+
+  function restartQuiz() {
+    answers[1] = answers[2] = answers[3] = null;
+    ['pip1','pip2','pip3'].forEach(id => document.getElementById(id).classList.remove('done'));
+    ['step2','step3','step-result'].forEach(id => document.getElementById(id).classList.remove('active'));
+    document.getElementById('step1').classList.add('active');
+  }
+
+  function submitForm() {
+    const name = document.getElementById('f-name').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    if (!name || !email) {
+      alert('Please enter your name and email address to continue.');
+      return;
+    }
+    document.getElementById('form-body').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+</script>
+</body>
+</html>
